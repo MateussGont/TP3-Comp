@@ -1,0 +1,2464 @@
+Terminais sem uso na gramática
+
+    ERROR
+
+
+Gramática
+
+    0 $accept: program $end
+
+    1 program: class_list
+
+    2 class_list: class
+    3           | class_list class
+    4           | class_list error
+    5           | error
+
+    6 class: CLASS TYPEID '{' feature_list '}' ';'
+    7      | CLASS TYPEID '{' '}' ';'
+    8      | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';'
+    9      | CLASS TYPEID INHERITS TYPEID '{' '}' ';'
+
+   10 feature_list: feature ';'
+   11             | feature_list feature ';'
+   12             | feature_list error ';'
+   13             | error ';'
+
+   14 feature: OBJECTID '(' ')' ':' TYPEID '{' expression '}'
+   15        | OBJECTID '(' formal_list ')' ':' TYPEID '{' expression '}'
+   16        | OBJECTID ':' TYPEID ASSIGN expression
+   17        | OBJECTID ':' TYPEID
+
+   18 formal_list: formal
+   19            | formal_list ',' formal
+
+   20 formal: OBJECTID ':' TYPEID
+
+   21 expression_comma_list: expression
+   22                      | expression_comma_list ',' expression
+
+   23 expression_semicolon_list: expression ';'
+   24                          | expression_semicolon_list expression ';'
+   25                          | expression_semicolon_list error ';'
+   26                          | error ';'
+
+   27 branch: OBJECTID ':' TYPEID DARROW expression ';'
+
+   28 branch_list: branch
+   29            | branch_list branch
+
+   30 let: OBJECTID ':' TYPEID IN expression
+   31    | OBJECTID ':' TYPEID ASSIGN expression IN expression
+   32    | OBJECTID ':' TYPEID ',' let
+   33    | OBJECTID ':' TYPEID ASSIGN expression ',' let
+   34    | error let
+
+   35 expression: OBJECTID ASSIGN expression
+   36           | expression '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression '.' OBJECTID '(' ')'
+   39           | expression '.' OBJECTID '(' expression_comma_list ')'
+   40           | OBJECTID '(' ')'
+   41           | OBJECTID '(' expression_comma_list ')'
+   42           | IF expression THEN expression ELSE expression FI
+   43           | WHILE expression LOOP expression POOL
+   44           | '{' expression_semicolon_list '}'
+   45           | LET let
+   46           | CASE expression OF branch_list ESAC
+   47           | NEW TYPEID
+   48           | ISVOID expression
+   49           | expression '+' expression
+   50           | expression '-' expression
+   51           | expression '*' expression
+   52           | expression '/' expression
+   53           | '~' expression
+   54           | expression '<' expression
+   55           | expression LE expression
+   56           | expression '=' expression
+   57           | NOT expression
+   58           | '(' expression ')'
+   59           | OBJECTID
+   60           | INT_CONST
+   61           | STR_CONST
+   62           | BOOL_CONST
+
+
+Terminais, com as regras onde eles aparecem
+
+    $end (0) 0
+    '(' (40) 14 15 36 37 38 39 40 41 58
+    ')' (41) 14 15 36 37 38 39 40 41 58
+    '*' (42) 51
+    '+' (43) 49
+    ',' (44) 19 22 32 33
+    '-' (45) 50
+    '.' (46) 36 37 38 39
+    '/' (47) 52
+    ':' (58) 14 15 16 17 20 27 30 31 32 33
+    ';' (59) 6 7 8 9 10 11 12 13 23 24 25 26 27
+    '<' (60) 54
+    '=' (61) 56
+    '@' (64) 36 37
+    '{' (123) 6 7 8 9 14 15 44
+    '}' (125) 6 7 8 9 14 15 44
+    '~' (126) 53
+    error (256) 4 5 12 13 25 26 34
+    CLASS (258) 6 7 8 9
+    ELSE (259) 42
+    FI (260) 42
+    IF (261) 42
+    IN (262) 30 31
+    INHERITS (263) 8 9
+    LET (264) 45
+    LOOP (265) 43
+    POOL (266) 43
+    THEN (267) 42
+    WHILE (268) 43
+    CASE (269) 46
+    ESAC (270) 46
+    OF (271) 46
+    DARROW (272) 27
+    NEW (273) 47
+    ISVOID (274) 48
+    STR_CONST <symbol> (275) 61
+    INT_CONST <symbol> (276) 60
+    BOOL_CONST <boolean> (277) 62
+    TYPEID <symbol> (278) 6 7 8 9 14 15 16 17 20 27 30 31 32 33 36 37 47
+    OBJECTID <symbol> (279) 14 15 16 17 20 27 30 31 32 33 35 36 37 38 39 40 41 59
+    ASSIGN (280) 16 31 33 35
+    NOT (281) 57
+    LE (282) 55
+    ERROR (283)
+
+
+Não terminais com as regras onde eles aparecem
+
+    $accept (45)
+        à esquerda: 0
+    program <program> (46)
+        à esquerda: 1
+        à direita: 0
+    class_list <classes> (47)
+        à esquerda: 2 3 4 5
+        à direita: 1 3 4
+    class <class_> (48)
+        à esquerda: 6 7 8 9
+        à direita: 2 3
+    feature_list <features> (49)
+        à esquerda: 10 11 12 13
+        à direita: 6 8 11 12
+    feature <feature> (50)
+        à esquerda: 14 15 16 17
+        à direita: 10 11
+    formal_list <formals> (51)
+        à esquerda: 18 19
+        à direita: 15 19
+    formal <formal> (52)
+        à esquerda: 20
+        à direita: 18 19
+    expression_comma_list <expressions> (53)
+        à esquerda: 21 22
+        à direita: 22 37 39 41
+    expression_semicolon_list <expressions> (54)
+        à esquerda: 23 24 25 26
+        à direita: 24 25 44
+    branch <case_> (55)
+        à esquerda: 27
+        à direita: 28 29
+    branch_list <cases> (56)
+        à esquerda: 28 29
+        à direita: 29 46
+    let <expression> (57)
+        à esquerda: 30 31 32 33 34
+        à direita: 32 33 34 45
+    expression <expression> (58)
+        à esquerda: 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62
+        à direita: 14 15 16 21 22 23 24 27 30 31 33 35 36 37 38 39 42 43 46 48 49 50 51 52 53 54 55 56 57 58
+
+
+Estado 0
+
+    0 $accept: • program $end
+
+    error  deslocar, e ir ao estado 1
+    CLASS  deslocar, e ir ao estado 2
+
+    program     ir ao estado 3
+    class_list  ir ao estado 4
+    class       ir ao estado 5
+
+
+Estado 1
+
+    5 class_list: error •
+
+    $padrão  reduzir usando a regra 5 (class_list)
+
+
+Estado 2
+
+    6 class: CLASS • TYPEID '{' feature_list '}' ';'
+    7      | CLASS • TYPEID '{' '}' ';'
+    8      | CLASS • TYPEID INHERITS TYPEID '{' feature_list '}' ';'
+    9      | CLASS • TYPEID INHERITS TYPEID '{' '}' ';'
+
+    TYPEID  deslocar, e ir ao estado 6
+
+
+Estado 3
+
+    0 $accept: program • $end
+
+    $end  deslocar, e ir ao estado 7
+
+
+Estado 4
+
+    1 program: class_list •
+    3 class_list: class_list • class
+    4           | class_list • error
+
+    error  deslocar, e ir ao estado 8
+    CLASS  deslocar, e ir ao estado 2
+
+    $end  reduzir usando a regra 1 (program)
+
+    class  ir ao estado 9
+
+
+Estado 5
+
+    2 class_list: class •
+
+    $padrão  reduzir usando a regra 2 (class_list)
+
+
+Estado 6
+
+    6 class: CLASS TYPEID • '{' feature_list '}' ';'
+    7      | CLASS TYPEID • '{' '}' ';'
+    8      | CLASS TYPEID • INHERITS TYPEID '{' feature_list '}' ';'
+    9      | CLASS TYPEID • INHERITS TYPEID '{' '}' ';'
+
+    INHERITS  deslocar, e ir ao estado 10
+    '{'       deslocar, e ir ao estado 11
+
+
+Estado 7
+
+    0 $accept: program $end •
+
+    $padrão  aceitar
+
+
+Estado 8
+
+    4 class_list: class_list error •
+
+    $padrão  reduzir usando a regra 4 (class_list)
+
+
+Estado 9
+
+    3 class_list: class_list class •
+
+    $padrão  reduzir usando a regra 3 (class_list)
+
+
+Estado 10
+
+    8 class: CLASS TYPEID INHERITS • TYPEID '{' feature_list '}' ';'
+    9      | CLASS TYPEID INHERITS • TYPEID '{' '}' ';'
+
+    TYPEID  deslocar, e ir ao estado 12
+
+
+Estado 11
+
+    6 class: CLASS TYPEID '{' • feature_list '}' ';'
+    7      | CLASS TYPEID '{' • '}' ';'
+
+    error     deslocar, e ir ao estado 13
+    OBJECTID  deslocar, e ir ao estado 14
+    '}'       deslocar, e ir ao estado 15
+
+    feature_list  ir ao estado 16
+    feature       ir ao estado 17
+
+
+Estado 12
+
+    8 class: CLASS TYPEID INHERITS TYPEID • '{' feature_list '}' ';'
+    9      | CLASS TYPEID INHERITS TYPEID • '{' '}' ';'
+
+    '{'  deslocar, e ir ao estado 18
+
+
+Estado 13
+
+   13 feature_list: error • ';'
+
+    ';'  deslocar, e ir ao estado 19
+
+
+Estado 14
+
+   14 feature: OBJECTID • '(' ')' ':' TYPEID '{' expression '}'
+   15        | OBJECTID • '(' formal_list ')' ':' TYPEID '{' expression '}'
+   16        | OBJECTID • ':' TYPEID ASSIGN expression
+   17        | OBJECTID • ':' TYPEID
+
+    '('  deslocar, e ir ao estado 20
+    ':'  deslocar, e ir ao estado 21
+
+
+Estado 15
+
+    7 class: CLASS TYPEID '{' '}' • ';'
+
+    ';'  deslocar, e ir ao estado 22
+
+
+Estado 16
+
+    6 class: CLASS TYPEID '{' feature_list • '}' ';'
+   11 feature_list: feature_list • feature ';'
+   12             | feature_list • error ';'
+
+    error     deslocar, e ir ao estado 23
+    OBJECTID  deslocar, e ir ao estado 14
+    '}'       deslocar, e ir ao estado 24
+
+    feature  ir ao estado 25
+
+
+Estado 17
+
+   10 feature_list: feature • ';'
+
+    ';'  deslocar, e ir ao estado 26
+
+
+Estado 18
+
+    8 class: CLASS TYPEID INHERITS TYPEID '{' • feature_list '}' ';'
+    9      | CLASS TYPEID INHERITS TYPEID '{' • '}' ';'
+
+    error     deslocar, e ir ao estado 13
+    OBJECTID  deslocar, e ir ao estado 14
+    '}'       deslocar, e ir ao estado 27
+
+    feature_list  ir ao estado 28
+    feature       ir ao estado 17
+
+
+Estado 19
+
+   13 feature_list: error ';' •
+
+    $padrão  reduzir usando a regra 13 (feature_list)
+
+
+Estado 20
+
+   14 feature: OBJECTID '(' • ')' ':' TYPEID '{' expression '}'
+   15        | OBJECTID '(' • formal_list ')' ':' TYPEID '{' expression '}'
+
+    OBJECTID  deslocar, e ir ao estado 29
+    ')'       deslocar, e ir ao estado 30
+
+    formal_list  ir ao estado 31
+    formal       ir ao estado 32
+
+
+Estado 21
+
+   16 feature: OBJECTID ':' • TYPEID ASSIGN expression
+   17        | OBJECTID ':' • TYPEID
+
+    TYPEID  deslocar, e ir ao estado 33
+
+
+Estado 22
+
+    7 class: CLASS TYPEID '{' '}' ';' •
+
+    $padrão  reduzir usando a regra 7 (class)
+
+
+Estado 23
+
+   12 feature_list: feature_list error • ';'
+
+    ';'  deslocar, e ir ao estado 34
+
+
+Estado 24
+
+    6 class: CLASS TYPEID '{' feature_list '}' • ';'
+
+    ';'  deslocar, e ir ao estado 35
+
+
+Estado 25
+
+   11 feature_list: feature_list feature • ';'
+
+    ';'  deslocar, e ir ao estado 36
+
+
+Estado 26
+
+   10 feature_list: feature ';' •
+
+    $padrão  reduzir usando a regra 10 (feature_list)
+
+
+Estado 27
+
+    9 class: CLASS TYPEID INHERITS TYPEID '{' '}' • ';'
+
+    ';'  deslocar, e ir ao estado 37
+
+
+Estado 28
+
+    8 class: CLASS TYPEID INHERITS TYPEID '{' feature_list • '}' ';'
+   11 feature_list: feature_list • feature ';'
+   12             | feature_list • error ';'
+
+    error     deslocar, e ir ao estado 23
+    OBJECTID  deslocar, e ir ao estado 14
+    '}'       deslocar, e ir ao estado 38
+
+    feature  ir ao estado 25
+
+
+Estado 29
+
+   20 formal: OBJECTID • ':' TYPEID
+
+    ':'  deslocar, e ir ao estado 39
+
+
+Estado 30
+
+   14 feature: OBJECTID '(' ')' • ':' TYPEID '{' expression '}'
+
+    ':'  deslocar, e ir ao estado 40
+
+
+Estado 31
+
+   15 feature: OBJECTID '(' formal_list • ')' ':' TYPEID '{' expression '}'
+   19 formal_list: formal_list • ',' formal
+
+    ')'  deslocar, e ir ao estado 41
+    ','  deslocar, e ir ao estado 42
+
+
+Estado 32
+
+   18 formal_list: formal •
+
+    $padrão  reduzir usando a regra 18 (formal_list)
+
+
+Estado 33
+
+   16 feature: OBJECTID ':' TYPEID • ASSIGN expression
+   17        | OBJECTID ':' TYPEID •
+
+    ASSIGN  deslocar, e ir ao estado 43
+
+    $padrão  reduzir usando a regra 17 (feature)
+
+
+Estado 34
+
+   12 feature_list: feature_list error ';' •
+
+    $padrão  reduzir usando a regra 12 (feature_list)
+
+
+Estado 35
+
+    6 class: CLASS TYPEID '{' feature_list '}' ';' •
+
+    $padrão  reduzir usando a regra 6 (class)
+
+
+Estado 36
+
+   11 feature_list: feature_list feature ';' •
+
+    $padrão  reduzir usando a regra 11 (feature_list)
+
+
+Estado 37
+
+    9 class: CLASS TYPEID INHERITS TYPEID '{' '}' ';' •
+
+    $padrão  reduzir usando a regra 9 (class)
+
+
+Estado 38
+
+    8 class: CLASS TYPEID INHERITS TYPEID '{' feature_list '}' • ';'
+
+    ';'  deslocar, e ir ao estado 44
+
+
+Estado 39
+
+   20 formal: OBJECTID ':' • TYPEID
+
+    TYPEID  deslocar, e ir ao estado 45
+
+
+Estado 40
+
+   14 feature: OBJECTID '(' ')' ':' • TYPEID '{' expression '}'
+
+    TYPEID  deslocar, e ir ao estado 46
+
+
+Estado 41
+
+   15 feature: OBJECTID '(' formal_list ')' • ':' TYPEID '{' expression '}'
+
+    ':'  deslocar, e ir ao estado 47
+
+
+Estado 42
+
+   19 formal_list: formal_list ',' • formal
+
+    OBJECTID  deslocar, e ir ao estado 29
+
+    formal  ir ao estado 48
+
+
+Estado 43
+
+   16 feature: OBJECTID ':' TYPEID ASSIGN • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 63
+
+
+Estado 44
+
+    8 class: CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';' •
+
+    $padrão  reduzir usando a regra 8 (class)
+
+
+Estado 45
+
+   20 formal: OBJECTID ':' TYPEID •
+
+    $padrão  reduzir usando a regra 20 (formal)
+
+
+Estado 46
+
+   14 feature: OBJECTID '(' ')' ':' TYPEID • '{' expression '}'
+
+    '{'  deslocar, e ir ao estado 64
+
+
+Estado 47
+
+   15 feature: OBJECTID '(' formal_list ')' ':' • TYPEID '{' expression '}'
+
+    TYPEID  deslocar, e ir ao estado 65
+
+
+Estado 48
+
+   19 formal_list: formal_list ',' formal •
+
+    $padrão  reduzir usando a regra 19 (formal_list)
+
+
+Estado 49
+
+   42 expression: IF • expression THEN expression ELSE expression FI
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 66
+
+
+Estado 50
+
+   45 expression: LET • let
+
+    error     deslocar, e ir ao estado 67
+    OBJECTID  deslocar, e ir ao estado 68
+
+    let  ir ao estado 69
+
+
+Estado 51
+
+   43 expression: WHILE • expression LOOP expression POOL
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 70
+
+
+Estado 52
+
+   46 expression: CASE • expression OF branch_list ESAC
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 71
+
+
+Estado 53
+
+   47 expression: NEW • TYPEID
+
+    TYPEID  deslocar, e ir ao estado 72
+
+
+Estado 54
+
+   48 expression: ISVOID • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 73
+
+
+Estado 55
+
+   61 expression: STR_CONST •
+
+    $padrão  reduzir usando a regra 61 (expression)
+
+
+Estado 56
+
+   60 expression: INT_CONST •
+
+    $padrão  reduzir usando a regra 60 (expression)
+
+
+Estado 57
+
+   62 expression: BOOL_CONST •
+
+    $padrão  reduzir usando a regra 62 (expression)
+
+
+Estado 58
+
+   35 expression: OBJECTID • ASSIGN expression
+   40           | OBJECTID • '(' ')'
+   41           | OBJECTID • '(' expression_comma_list ')'
+   59           | OBJECTID •
+
+    ASSIGN  deslocar, e ir ao estado 74
+    '('     deslocar, e ir ao estado 75
+
+    $padrão  reduzir usando a regra 59 (expression)
+
+
+Estado 59
+
+   57 expression: NOT • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 76
+
+
+Estado 60
+
+   53 expression: '~' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 77
+
+
+Estado 61
+
+   44 expression: '{' • expression_semicolon_list '}'
+
+    error       deslocar, e ir ao estado 78
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression_semicolon_list  ir ao estado 79
+    expression                 ir ao estado 80
+
+
+Estado 62
+
+   58 expression: '(' • expression ')'
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 81
+
+
+Estado 63
+
+   16 feature: OBJECTID ':' TYPEID ASSIGN expression •
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 16 (feature)
+
+
+Estado 64
+
+   14 feature: OBJECTID '(' ')' ':' TYPEID '{' • expression '}'
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 91
+
+
+Estado 65
+
+   15 feature: OBJECTID '(' formal_list ')' ':' TYPEID • '{' expression '}'
+
+    '{'  deslocar, e ir ao estado 92
+
+
+Estado 66
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   42           | IF expression • THEN expression ELSE expression FI
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    THEN  deslocar, e ir ao estado 93
+    LE    deslocar, e ir ao estado 82
+    '<'   deslocar, e ir ao estado 83
+    '='   deslocar, e ir ao estado 84
+    '-'   deslocar, e ir ao estado 85
+    '+'   deslocar, e ir ao estado 86
+    '*'   deslocar, e ir ao estado 87
+    '/'   deslocar, e ir ao estado 88
+    '@'   deslocar, e ir ao estado 89
+    '.'   deslocar, e ir ao estado 90
+
+
+Estado 67
+
+   34 let: error • let
+
+    error     deslocar, e ir ao estado 67
+    OBJECTID  deslocar, e ir ao estado 68
+
+    let  ir ao estado 94
+
+
+Estado 68
+
+   30 let: OBJECTID • ':' TYPEID IN expression
+   31    | OBJECTID • ':' TYPEID ASSIGN expression IN expression
+   32    | OBJECTID • ':' TYPEID ',' let
+   33    | OBJECTID • ':' TYPEID ASSIGN expression ',' let
+
+    ':'  deslocar, e ir ao estado 95
+
+
+Estado 69
+
+   45 expression: LET let •
+
+    $padrão  reduzir usando a regra 45 (expression)
+
+
+Estado 70
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   43           | WHILE expression • LOOP expression POOL
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LOOP  deslocar, e ir ao estado 96
+    LE    deslocar, e ir ao estado 82
+    '<'   deslocar, e ir ao estado 83
+    '='   deslocar, e ir ao estado 84
+    '-'   deslocar, e ir ao estado 85
+    '+'   deslocar, e ir ao estado 86
+    '*'   deslocar, e ir ao estado 87
+    '/'   deslocar, e ir ao estado 88
+    '@'   deslocar, e ir ao estado 89
+    '.'   deslocar, e ir ao estado 90
+
+
+Estado 71
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   46           | CASE expression • OF branch_list ESAC
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    OF   deslocar, e ir ao estado 97
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+
+Estado 72
+
+   47 expression: NEW TYPEID •
+
+    $padrão  reduzir usando a regra 47 (expression)
+
+
+Estado 73
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   48           | ISVOID expression •
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 48 (expression)
+
+
+Estado 74
+
+   35 expression: OBJECTID ASSIGN • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 98
+
+
+Estado 75
+
+   40 expression: OBJECTID '(' • ')'
+   41           | OBJECTID '(' • expression_comma_list ')'
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+    ')'         deslocar, e ir ao estado 99
+
+    expression_comma_list  ir ao estado 100
+    expression             ir ao estado 101
+
+
+Estado 76
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+   57           | NOT expression •
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 57 (expression)
+
+
+Estado 77
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   53           | '~' expression •
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 53 (expression)
+
+
+Estado 78
+
+   26 expression_semicolon_list: error • ';'
+
+    ';'  deslocar, e ir ao estado 102
+
+
+Estado 79
+
+   24 expression_semicolon_list: expression_semicolon_list • expression ';'
+   25                          | expression_semicolon_list • error ';'
+   44 expression: '{' expression_semicolon_list • '}'
+
+    error       deslocar, e ir ao estado 103
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '}'         deslocar, e ir ao estado 104
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 105
+
+
+Estado 80
+
+   23 expression_semicolon_list: expression • ';'
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+    ';'  deslocar, e ir ao estado 106
+
+
+Estado 81
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+   58           | '(' expression • ')'
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+    ')'  deslocar, e ir ao estado 107
+
+
+Estado 82
+
+   55 expression: expression LE • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 108
+
+
+Estado 83
+
+   54 expression: expression '<' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 109
+
+
+Estado 84
+
+   56 expression: expression '=' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 110
+
+
+Estado 85
+
+   50 expression: expression '-' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 111
+
+
+Estado 86
+
+   49 expression: expression '+' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 112
+
+
+Estado 87
+
+   51 expression: expression '*' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 113
+
+
+Estado 88
+
+   52 expression: expression '/' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 114
+
+
+Estado 89
+
+   36 expression: expression '@' • TYPEID '.' OBJECTID '(' ')'
+   37           | expression '@' • TYPEID '.' OBJECTID '(' expression_comma_list ')'
+
+    TYPEID  deslocar, e ir ao estado 115
+
+
+Estado 90
+
+   38 expression: expression '.' • OBJECTID '(' ')'
+   39           | expression '.' • OBJECTID '(' expression_comma_list ')'
+
+    OBJECTID  deslocar, e ir ao estado 116
+
+
+Estado 91
+
+   14 feature: OBJECTID '(' ')' ':' TYPEID '{' expression • '}'
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+    '}'  deslocar, e ir ao estado 117
+
+
+Estado 92
+
+   15 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' • expression '}'
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 118
+
+
+Estado 93
+
+   42 expression: IF expression THEN • expression ELSE expression FI
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 119
+
+
+Estado 94
+
+   34 let: error let •
+
+    $padrão  reduzir usando a regra 34 (let)
+
+
+Estado 95
+
+   30 let: OBJECTID ':' • TYPEID IN expression
+   31    | OBJECTID ':' • TYPEID ASSIGN expression IN expression
+   32    | OBJECTID ':' • TYPEID ',' let
+   33    | OBJECTID ':' • TYPEID ASSIGN expression ',' let
+
+    TYPEID  deslocar, e ir ao estado 120
+
+
+Estado 96
+
+   43 expression: WHILE expression LOOP • expression POOL
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 121
+
+
+Estado 97
+
+   46 expression: CASE expression OF • branch_list ESAC
+
+    OBJECTID  deslocar, e ir ao estado 122
+
+    branch       ir ao estado 123
+    branch_list  ir ao estado 124
+
+
+Estado 98
+
+   35 expression: OBJECTID ASSIGN expression •
+   36           | expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 35 (expression)
+
+
+Estado 99
+
+   40 expression: OBJECTID '(' ')' •
+
+    $padrão  reduzir usando a regra 40 (expression)
+
+
+Estado 100
+
+   22 expression_comma_list: expression_comma_list • ',' expression
+   41 expression: OBJECTID '(' expression_comma_list • ')'
+
+    ')'  deslocar, e ir ao estado 125
+    ','  deslocar, e ir ao estado 126
+
+
+Estado 101
+
+   21 expression_comma_list: expression •
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 21 (expression_comma_list)
+
+
+Estado 102
+
+   26 expression_semicolon_list: error ';' •
+
+    $padrão  reduzir usando a regra 26 (expression_semicolon_list)
+
+
+Estado 103
+
+   25 expression_semicolon_list: expression_semicolon_list error • ';'
+
+    ';'  deslocar, e ir ao estado 127
+
+
+Estado 104
+
+   44 expression: '{' expression_semicolon_list '}' •
+
+    $padrão  reduzir usando a regra 44 (expression)
+
+
+Estado 105
+
+   24 expression_semicolon_list: expression_semicolon_list expression • ';'
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+    ';'  deslocar, e ir ao estado 128
+
+
+Estado 106
+
+   23 expression_semicolon_list: expression ';' •
+
+    $padrão  reduzir usando a regra 23 (expression_semicolon_list)
+
+
+Estado 107
+
+   58 expression: '(' expression ')' •
+
+    $padrão  reduzir usando a regra 58 (expression)
+
+
+Estado 108
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   55           | expression LE expression •
+   56           | expression • '=' expression
+
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    LE   erro (não associativo)
+    '<'  erro (não associativo)
+    '='  erro (não associativo)
+
+    $padrão  reduzir usando a regra 55 (expression)
+
+
+Estado 109
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   54           | expression '<' expression •
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    LE   erro (não associativo)
+    '<'  erro (não associativo)
+    '='  erro (não associativo)
+
+    $padrão  reduzir usando a regra 54 (expression)
+
+
+Estado 110
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+   56           | expression '=' expression •
+
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    LE   erro (não associativo)
+    '<'  erro (não associativo)
+    '='  erro (não associativo)
+
+    $padrão  reduzir usando a regra 56 (expression)
+
+
+Estado 111
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   50           | expression '-' expression •
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 50 (expression)
+
+
+Estado 112
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   49           | expression '+' expression •
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 49 (expression)
+
+
+Estado 113
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   51           | expression '*' expression •
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 51 (expression)
+
+
+Estado 114
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   52           | expression '/' expression •
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 52 (expression)
+
+
+Estado 115
+
+   36 expression: expression '@' TYPEID • '.' OBJECTID '(' ')'
+   37           | expression '@' TYPEID • '.' OBJECTID '(' expression_comma_list ')'
+
+    '.'  deslocar, e ir ao estado 129
+
+
+Estado 116
+
+   38 expression: expression '.' OBJECTID • '(' ')'
+   39           | expression '.' OBJECTID • '(' expression_comma_list ')'
+
+    '('  deslocar, e ir ao estado 130
+
+
+Estado 117
+
+   14 feature: OBJECTID '(' ')' ':' TYPEID '{' expression '}' •
+
+    $padrão  reduzir usando a regra 14 (feature)
+
+
+Estado 118
+
+   15 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expression • '}'
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+    '}'  deslocar, e ir ao estado 131
+
+
+Estado 119
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   42           | IF expression THEN expression • ELSE expression FI
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    ELSE  deslocar, e ir ao estado 132
+    LE    deslocar, e ir ao estado 82
+    '<'   deslocar, e ir ao estado 83
+    '='   deslocar, e ir ao estado 84
+    '-'   deslocar, e ir ao estado 85
+    '+'   deslocar, e ir ao estado 86
+    '*'   deslocar, e ir ao estado 87
+    '/'   deslocar, e ir ao estado 88
+    '@'   deslocar, e ir ao estado 89
+    '.'   deslocar, e ir ao estado 90
+
+
+Estado 120
+
+   30 let: OBJECTID ':' TYPEID • IN expression
+   31    | OBJECTID ':' TYPEID • ASSIGN expression IN expression
+   32    | OBJECTID ':' TYPEID • ',' let
+   33    | OBJECTID ':' TYPEID • ASSIGN expression ',' let
+
+    IN      deslocar, e ir ao estado 133
+    ASSIGN  deslocar, e ir ao estado 134
+    ','     deslocar, e ir ao estado 135
+
+
+Estado 121
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   43           | WHILE expression LOOP expression • POOL
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    POOL  deslocar, e ir ao estado 136
+    LE    deslocar, e ir ao estado 82
+    '<'   deslocar, e ir ao estado 83
+    '='   deslocar, e ir ao estado 84
+    '-'   deslocar, e ir ao estado 85
+    '+'   deslocar, e ir ao estado 86
+    '*'   deslocar, e ir ao estado 87
+    '/'   deslocar, e ir ao estado 88
+    '@'   deslocar, e ir ao estado 89
+    '.'   deslocar, e ir ao estado 90
+
+
+Estado 122
+
+   27 branch: OBJECTID • ':' TYPEID DARROW expression ';'
+
+    ':'  deslocar, e ir ao estado 137
+
+
+Estado 123
+
+   28 branch_list: branch •
+
+    $padrão  reduzir usando a regra 28 (branch_list)
+
+
+Estado 124
+
+   29 branch_list: branch_list • branch
+   46 expression: CASE expression OF branch_list • ESAC
+
+    ESAC      deslocar, e ir ao estado 138
+    OBJECTID  deslocar, e ir ao estado 122
+
+    branch  ir ao estado 139
+
+
+Estado 125
+
+   41 expression: OBJECTID '(' expression_comma_list ')' •
+
+    $padrão  reduzir usando a regra 41 (expression)
+
+
+Estado 126
+
+   22 expression_comma_list: expression_comma_list ',' • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 140
+
+
+Estado 127
+
+   25 expression_semicolon_list: expression_semicolon_list error ';' •
+
+    $padrão  reduzir usando a regra 25 (expression_semicolon_list)
+
+
+Estado 128
+
+   24 expression_semicolon_list: expression_semicolon_list expression ';' •
+
+    $padrão  reduzir usando a regra 24 (expression_semicolon_list)
+
+
+Estado 129
+
+   36 expression: expression '@' TYPEID '.' • OBJECTID '(' ')'
+   37           | expression '@' TYPEID '.' • OBJECTID '(' expression_comma_list ')'
+
+    OBJECTID  deslocar, e ir ao estado 141
+
+
+Estado 130
+
+   38 expression: expression '.' OBJECTID '(' • ')'
+   39           | expression '.' OBJECTID '(' • expression_comma_list ')'
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+    ')'         deslocar, e ir ao estado 142
+
+    expression_comma_list  ir ao estado 143
+    expression             ir ao estado 101
+
+
+Estado 131
+
+   15 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expression '}' •
+
+    $padrão  reduzir usando a regra 15 (feature)
+
+
+Estado 132
+
+   42 expression: IF expression THEN expression ELSE • expression FI
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 144
+
+
+Estado 133
+
+   30 let: OBJECTID ':' TYPEID IN • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 145
+
+
+Estado 134
+
+   31 let: OBJECTID ':' TYPEID ASSIGN • expression IN expression
+   33    | OBJECTID ':' TYPEID ASSIGN • expression ',' let
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 146
+
+
+Estado 135
+
+   32 let: OBJECTID ':' TYPEID ',' • let
+
+    error     deslocar, e ir ao estado 67
+    OBJECTID  deslocar, e ir ao estado 68
+
+    let  ir ao estado 147
+
+
+Estado 136
+
+   43 expression: WHILE expression LOOP expression POOL •
+
+    $padrão  reduzir usando a regra 43 (expression)
+
+
+Estado 137
+
+   27 branch: OBJECTID ':' • TYPEID DARROW expression ';'
+
+    TYPEID  deslocar, e ir ao estado 148
+
+
+Estado 138
+
+   46 expression: CASE expression OF branch_list ESAC •
+
+    $padrão  reduzir usando a regra 46 (expression)
+
+
+Estado 139
+
+   29 branch_list: branch_list branch •
+
+    $padrão  reduzir usando a regra 29 (branch_list)
+
+
+Estado 140
+
+   22 expression_comma_list: expression_comma_list ',' expression •
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 22 (expression_comma_list)
+
+
+Estado 141
+
+   36 expression: expression '@' TYPEID '.' OBJECTID • '(' ')'
+   37           | expression '@' TYPEID '.' OBJECTID • '(' expression_comma_list ')'
+
+    '('  deslocar, e ir ao estado 149
+
+
+Estado 142
+
+   38 expression: expression '.' OBJECTID '(' ')' •
+
+    $padrão  reduzir usando a regra 38 (expression)
+
+
+Estado 143
+
+   22 expression_comma_list: expression_comma_list • ',' expression
+   39 expression: expression '.' OBJECTID '(' expression_comma_list • ')'
+
+    ')'  deslocar, e ir ao estado 150
+    ','  deslocar, e ir ao estado 126
+
+
+Estado 144
+
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   42           | IF expression THEN expression ELSE expression • FI
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    FI   deslocar, e ir ao estado 151
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+
+Estado 145
+
+   30 let: OBJECTID ':' TYPEID IN expression •
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 30 (let)
+
+
+Estado 146
+
+   31 let: OBJECTID ':' TYPEID ASSIGN expression • IN expression
+   33    | OBJECTID ':' TYPEID ASSIGN expression • ',' let
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    IN   deslocar, e ir ao estado 152
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+    ','  deslocar, e ir ao estado 153
+
+
+Estado 147
+
+   32 let: OBJECTID ':' TYPEID ',' let •
+
+    $padrão  reduzir usando a regra 32 (let)
+
+
+Estado 148
+
+   27 branch: OBJECTID ':' TYPEID • DARROW expression ';'
+
+    DARROW  deslocar, e ir ao estado 154
+
+
+Estado 149
+
+   36 expression: expression '@' TYPEID '.' OBJECTID '(' • ')'
+   37           | expression '@' TYPEID '.' OBJECTID '(' • expression_comma_list ')'
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+    ')'         deslocar, e ir ao estado 155
+
+    expression_comma_list  ir ao estado 156
+    expression             ir ao estado 101
+
+
+Estado 150
+
+   39 expression: expression '.' OBJECTID '(' expression_comma_list ')' •
+
+    $padrão  reduzir usando a regra 39 (expression)
+
+
+Estado 151
+
+   42 expression: IF expression THEN expression ELSE expression FI •
+
+    $padrão  reduzir usando a regra 42 (expression)
+
+
+Estado 152
+
+   31 let: OBJECTID ':' TYPEID ASSIGN expression IN • expression
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 157
+
+
+Estado 153
+
+   33 let: OBJECTID ':' TYPEID ASSIGN expression ',' • let
+
+    error     deslocar, e ir ao estado 67
+    OBJECTID  deslocar, e ir ao estado 68
+
+    let  ir ao estado 158
+
+
+Estado 154
+
+   27 branch: OBJECTID ':' TYPEID DARROW • expression ';'
+
+    IF          deslocar, e ir ao estado 49
+    LET         deslocar, e ir ao estado 50
+    WHILE       deslocar, e ir ao estado 51
+    CASE        deslocar, e ir ao estado 52
+    NEW         deslocar, e ir ao estado 53
+    ISVOID      deslocar, e ir ao estado 54
+    STR_CONST   deslocar, e ir ao estado 55
+    INT_CONST   deslocar, e ir ao estado 56
+    BOOL_CONST  deslocar, e ir ao estado 57
+    OBJECTID    deslocar, e ir ao estado 58
+    NOT         deslocar, e ir ao estado 59
+    '~'         deslocar, e ir ao estado 60
+    '{'         deslocar, e ir ao estado 61
+    '('         deslocar, e ir ao estado 62
+
+    expression  ir ao estado 159
+
+
+Estado 155
+
+   36 expression: expression '@' TYPEID '.' OBJECTID '(' ')' •
+
+    $padrão  reduzir usando a regra 36 (expression)
+
+
+Estado 156
+
+   22 expression_comma_list: expression_comma_list • ',' expression
+   37 expression: expression '@' TYPEID '.' OBJECTID '(' expression_comma_list • ')'
+
+    ')'  deslocar, e ir ao estado 160
+    ','  deslocar, e ir ao estado 126
+
+
+Estado 157
+
+   31 let: OBJECTID ':' TYPEID ASSIGN expression IN expression •
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+
+    $padrão  reduzir usando a regra 31 (let)
+
+
+Estado 158
+
+   33 let: OBJECTID ':' TYPEID ASSIGN expression ',' let •
+
+    $padrão  reduzir usando a regra 33 (let)
+
+
+Estado 159
+
+   27 branch: OBJECTID ':' TYPEID DARROW expression • ';'
+   36 expression: expression • '@' TYPEID '.' OBJECTID '(' ')'
+   37           | expression • '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+   38           | expression • '.' OBJECTID '(' ')'
+   39           | expression • '.' OBJECTID '(' expression_comma_list ')'
+   49           | expression • '+' expression
+   50           | expression • '-' expression
+   51           | expression • '*' expression
+   52           | expression • '/' expression
+   54           | expression • '<' expression
+   55           | expression • LE expression
+   56           | expression • '=' expression
+
+    LE   deslocar, e ir ao estado 82
+    '<'  deslocar, e ir ao estado 83
+    '='  deslocar, e ir ao estado 84
+    '-'  deslocar, e ir ao estado 85
+    '+'  deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 87
+    '/'  deslocar, e ir ao estado 88
+    '@'  deslocar, e ir ao estado 89
+    '.'  deslocar, e ir ao estado 90
+    ';'  deslocar, e ir ao estado 161
+
+
+Estado 160
+
+   37 expression: expression '@' TYPEID '.' OBJECTID '(' expression_comma_list ')' •
+
+    $padrão  reduzir usando a regra 37 (expression)
+
+
+Estado 161
+
+   27 branch: OBJECTID ':' TYPEID DARROW expression ';' •
+
+    $padrão  reduzir usando a regra 27 (branch)
