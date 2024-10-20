@@ -147,17 +147,108 @@ Este projeto implementa um analisador sintático para a linguagem Cool, utilizan
 
 O analisador sintático foi desenvolvido com base na gramática LL(1) da linguagem Cool. Ele é capaz de processar a entrada e gerar a árvore de derivação correspondente, detectando eventuais erros sintáticos e exibindo mensagens de erro.
 
-## Funcionalidades
-
-- **Parsing Descendente:** Utiliza a técnica de parsing descendente para analisar o código.
-- **Algoritmo LL(1):** A implementação é compatível com a gramática LL(1) da linguagem Cool.
-- **Mensagens de Erro Informativas:** Fornece feedback claro sobre erros sintáticos encontrados durante a análise.
-- **Casos de Teste Abrangentes:** Inclui um conjunto de testes que cobre as principais construções da linguagem, como classes, expressões, declarações, entre outras.
--------------
 ## Modificações
 
-### Não-terminais adicionados (cool.y):
-{formal_list, formal, branch_list, branch, expression_comma_list, expression_semicolon_list, let.}
-- **Estes não-terminais foram adicionados para dar suporte à construção de expressões mais complexas, como a lista de formais para funções e métodos,
-listas de expressões separadas por vírgula ou ponto e vírgula, e a introdução da expressão LET na gramática.**
+	### Não-terminais adicionados (cool.y):
+		{formal_list, formal, branch_list, branch, expression_comma_list, expression_semicolon_list, let.}
+		-> Estes não-terminais foram adicionados para dar suporte à construção de expressões mais complexas, como a lista de formais para funções e métodos, listas de expressões separadas por vírgula ou ponto e vírgula, e a introdução da expressão LET na gramática.
+	
+	### Regras de Precedencia :
+	
+					%right LET IN
+					%right ASSIGN
+					%left NOT
+					%nonassoc LE '<' '='
+					%left '-' '+'
+					%left '*' '/'
+					%left ISVOID
+					%left '~'
+					%left '@'
+					%left '.'
+	
+		Essas regras de precedência foram adicionadas para controlar a ordem de avaliação das operações aritméticas e lógicas. 
+		* e / têm precedência maior que + e -, e o operador de atribuição ASSIGN (=) tem uma precedência mais baixa.
+	
+	### Regras de Gramática
 
+		- PROGRAM :
+			[program : class_list	{ @$ = @1; ast_root = program($1); }]
+			- Define a Raiz da AST
+
+		- CLASS_LIST e FEATURE_LIST:
+			class_list
+    				: class { $$ = single_Classes($1); parse_results = $$; }
+   				| class_list class { $$ = append_Classes($1, single_Classes($2)); parse_results = $$; }
+    				| class_list error {}
+    				| error {}
+
+			feature_list
+    				: feature ';' { $$ = single_Features($1); }
+   				| feature_list feature ';' { $$ = append_Features($1, single_Features($2)); }
+    				| feature_list error ';' {}
+    				| error ';' {}
+
+			-> error {} As regras com error tratam erros de sintaxe sem interromper o processo de parsing
+			-> As listas de elementos são compostas por vários itens que podem ser analisados independentemente,
+				quando deixamos  o erro continuar o processo de parsing, permitimos que o parser colete as classes que estão corretas, 
+				mesmo que uma classe esteja errada na lista.
+
+		- FEATURE:
+			feature
+    				: OBJECTID '(' ')' ':' TYPEID '{' expression '}' { $$ = method($1, nil_Formals(), $5, $7); }
+    				| OBJECTID '(' formal_list ')' ':' TYPEID '{' expression '}' { $$ = method($1, $3, $6, $8); }
+   				| OBJECTID ':' TYPEID ASSIGN expression { $$ = attr($1, $3, $5); }
+    				| OBJECTID ':' TYPEID { $$ = attr($1, $3, no_expr()); }
+
+			-> Define uma funcionalidade que pode ser:
+				* Um método (com ou sem parâmetros).
+				* Um atributo (com ou sem valor atribuído).
+
+		- LET:
+			let
+    				: OBJECTID ':' TYPEID IN expression
+    				{ $$ = let($1, $3, no_expr(), $5); }
+    				| OBJECTID ':' TYPEID ASSIGN expression IN expression
+    				{ $$ = let($1, $3, $5, $7); }
+    				| OBJECTID ':' TYPEID ',' let
+    				{ $$ = let($1, $3, no_expr(), $5); }
+    				| OBJECTID ':' TYPEID ASSIGN expression ',' let
+    				{ $$ = let($1, $3, $5, $7); }
+    				| error let
+    				{ }
+    				;
+
+			->A construção let é usada para declarar variáveis em COOL e se houver um erro em uma parte da declaração, 
+				o parser ainda pode continuar analisando outras declarações na mesma construção let. 
+				O uso de error let {} permite essa recuperação e evita que o erro em uma variável interrompa a análise de outras variáveis ou do restante da expressão.
+
+
+		- EXPRESSION: 
+			expression
+			    : OBJECTID ASSIGN expression
+			    { $$ = assign($1, $3); }
+			    | expression '@' TYPEID '.' OBJECTID '(' ')'
+			    { $$ = static_dispatch($1, $3, $5, nil_Expressions()); }
+			    | expression '@' TYPEID '.' OBJECTID '(' expression_comma_list ')'
+			    { $$ = static_dispatch($1, $3, $5, $7); }
+			    | expression '.' OBJECTID '(' ')'
+			    { $$ = dispatch($1, $3, nil_Expressions()); }
+			    | expression '.' OBJECTID '(' expression_comma_list ')'
+			    { $$ = dispatch($1, $3, $5); }
+			    | {...}
+    				; 
+			->A regra expression define as expressões na linguagem COOL. 
+			As expressões representam a lógica e as operações no programa, incluindo atribuições, chamadas de métodos, condicionais, loops, e expressões aritméticas. 
+
+
+	### Considerações 
+
+		- Todas as classes e tipos criados foram adicionados no arquivo de cabeçalho para criação da AST
+		- Os testes contidos no projeto base foram bem sucedidos, identificou erros quando deveria.
+		- O entendimento sobre o trabalho melhorou em nosso grupo, anteriormente ficamos um pouco perdidos
+			porem nesse trabalho tivemos mais conhecimento do que estávamos fazendo.
+				
+
+		
+			
+			
