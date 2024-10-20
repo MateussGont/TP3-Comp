@@ -139,9 +139,25 @@ Instructions
 	GOOD LUCK!
 
 ---8<------8<------8<------8<---cut here---8<------8<------8<------8<---
-Foi utilizada a tecnica de parsing descendente para construir o analisador sintatico da linguagem cool
-Foi implementado o algoritmo de parsing LL(1), visto que a gramatica da linguagem cool e LL(1)
-Para testar o analisador sint[atico, foi utilizado um conjunto de casos de teste que abrangem todos os aspectos da gram[atica da linguagem cool, em que foram criados casos de testes para cada tipo de construcao da linguagem cool, como classes, expressoes, declaracoes e etc.
-Dentre os casos de testes, foi utilizado o primeiro codigo do projeto, que foi a pilha em liguagem cool e foi observado a arvore de derivacao que foi gerada.
-Portanto, acreditamos que o trabalho possa estar correto pois foi construido baseado na gramatica LL(1) e utilizando o parsing LL(1) e baseado nos testes do primeiro trabalho, ele foi capaz de detectar todos os erros sintaticos na entrada e gerar mensagens de erros claras e informativas.
-----------------
+# Cool Language Parser
+
+Este projeto implementa um analisador sintático para a linguagem Cool, utilizando a técnica de parsing descendente e o algoritmo LL(1).
+
+## Descrição
+
+O analisador sintático foi desenvolvido com base na gramática LL(1) da linguagem Cool. Ele é capaz de processar a entrada e gerar a árvore de derivação correspondente, detectando eventuais erros sintáticos e exibindo mensagens de erro.
+
+## Funcionalidades
+
+- **Parsing Descendente:** Utiliza a técnica de parsing descendente para analisar o código.
+- **Algoritmo LL(1):** A implementação é compatível com a gramática LL(1) da linguagem Cool.
+- **Mensagens de Erro Informativas:** Fornece feedback claro sobre erros sintáticos encontrados durante a análise.
+- **Casos de Teste Abrangentes:** Inclui um conjunto de testes que cobre as principais construções da linguagem, como classes, expressões, declarações, entre outras.
+-------------
+## Modificações
+
+### Não-terminais adicionados (cool.y):
+{formal_list, formal, branch_list, branch, expression_comma_list, expression_semicolon_list, let.}
+- **Estes não-terminais foram adicionados para dar suporte à construção de expressões mais complexas, como a lista de formais para funções e métodos,
+listas de expressões separadas por vírgula ou ponto e vírgula, e a introdução da expressão LET na gramática.**
+
