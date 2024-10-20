@@ -1998,7 +1998,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 294 "cool.y"
+#line 295 "cool.y"
 
     
     /* This function is called automatically when Bison detects a parse error. */

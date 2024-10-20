@@ -290,6 +290,7 @@
     { $$ = bool_const($1); }
     ;   
     
+    
     /* end of grammar */
     %%
     
